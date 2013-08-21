@@ -2,8 +2,8 @@
 Yet Another Sudoku Solver
 ===================================================
 
-Simply an exercise to practice/learn more about persistent
-data structures and TDD. The standard methods (constraint
+Simply an exercise to (i) practice TDD and (ii) learn more
+about persistent data structures. The standard methods (constraint
 propagation and DFS/backtracking) will be used.
 
 References:
