@@ -12,9 +12,8 @@ References:
 
 Roadmap
 ---------------------------------------------------
-1. Write tests to load puzzles from txt file with explicit separator
-2. Write function to load from file
-3. Write tests for translation between representations
-4. Write translation between representation code
-5. ...
+1. Write tests for translation between representations
+2. Write translation between representation code
+3. Write tests for pretty printing of board
+4. Write prettyprinting function
 
