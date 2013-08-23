@@ -12,8 +12,7 @@ References:
 
 Roadmap
 ---------------------------------------------------
-1. Write tests for translation between representations
-2. Write translation between representation code
-3. Write tests for pretty printing of board
-4. Write prettyprinting function
+1) finish tests for peer indices
+2) peer indices function
+3) ...
 
