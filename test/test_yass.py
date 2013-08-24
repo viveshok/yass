@@ -94,30 +94,96 @@ class TestYass(unittest.TestCase):
 
         self.assertEqual(yass.prettyprint(puzzle), expected)
 
-#    def test_peers_indices():
-#
-#        observed = yass.peers_indices((0, 3), 'row')
-#        expected = [(0, 0), (0, 1), (0, 2), (0, 4),
-#                        (0, 5), (0, 6), (0, 7), (0, 8)]
-#
-#        self.assertEquals(observed, expected)
-#
-#        observed = yass.peers_indices((0, 3), 'row', True)
-#        expected = [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4),
-#                        (0, 5), (0, 6), (0, 7), (0, 8)]
-#
-#        self.assertEquals(observed, expected)
-#
-#        observed = yass.peers_indices((7, 1), 'column', True)
-#        expected = [(0, 1), (1, 1), (2, 1), (3, 1), (4, 1),
-#                        (5, 1), (6, 1), (7, 1), (8, 1)]
-#
-#        observed = yass.peers_indices((7, 1), 'column', False)
-#        expected = [(0, 1), (1, 1), (2, 1), (3, 1), (4, 1),
-#                        (5, 1), (6, 1), (8, 1)]
-#
-#        self.assertEquals(observed, expected)
-      
+    def test_peers_indices(self):
+
+        observed = yass.peers_indices_row((0, 3))
+        expected = {(0, 0), (0, 1), (0, 2), (0, 3), (0, 4),
+                        (0, 5), (0, 6), (0, 7), (0, 8)}
+        self.assertEqual(observed, expected)
+
+        observed = yass.peers_indices_column((7, 1))
+        expected = {(0, 1), (1, 1), (2, 1), (3, 1), (4, 1),
+                        (5, 1), (6, 1), (7, 1), (8, 1)}
+        self.assertEqual(observed, expected)
+
+        observed = yass.peers_indices_unit((5, 6))
+        expected = {(3, 6), (3, 7), (3, 8), (4, 6), (4, 7),
+                        (4, 8), (5, 6), (5, 7), (5, 8)}
+        self.assertEqual(observed, expected)
+
+        observed = yass.peers_indices((0, 3), 'row')
+        expected = {(0, 0), (0, 1), (0, 2), (0, 4),
+                        (0, 5), (0, 6), (0, 7), (0, 8)}
+        self.assertEqual(observed, expected)
+
+        observed = yass.peers_indices((0, 3), 'row', True)
+        expected = {(0, 0), (0, 1), (0, 2), (0, 3), (0, 4),
+                        (0, 5), (0, 6), (0, 7), (0, 8)}
+        self.assertEqual(observed, expected)
+
+        observed = yass.peers_indices((7, 1), 'column', True)
+        expected = {(0, 1), (1, 1), (2, 1), (3, 1), (4, 1),
+                        (5, 1), (6, 1), (7, 1), (8, 1)}
+        self.assertEqual(observed, expected)
+
+        observed = yass.peers_indices((7, 1), 'column', False)
+        expected = {(0, 1), (1, 1), (2, 1), (3, 1), (4, 1),
+                        (5, 1), (6, 1), (8, 1)}
+        self.assertEqual(observed, expected)
+
+        observed = yass.peers_indices((5, 6), 'unit')
+        expected = {(3, 6), (3, 7), (3, 8), (4, 6), (4, 7),
+                        (4, 8), (5, 7), (5, 8)}
+        self.assertEqual(observed, expected)
+
+        observed = yass.peers_indices((5, 6), 'unit', True)
+        expected = {(3, 6), (3, 7), (3, 8), (4, 6), (4, 7),
+                        (4, 8), (5, 6), (5, 7), (5, 8)}
+        self.assertEqual(observed, expected)
+
+        observed = yass.peers_indices((6, 5), 'all', True)
+        expected = {(6, 0), (6, 1), (6, 2), (6, 3), (6, 4),
+                    (6, 5), (6, 6), (6, 7), (6, 8), (0, 5),
+                    (1, 5), (2, 5), (3, 5), (4, 5), (5, 5),
+                    (7, 5), (8, 5), (7, 3), (7, 4), (8, 3), (8, 4)}
+        self.assertEqual(observed, expected)
+
+        observed = yass.peers_indices((6, 5), 'all')
+        expected = {(6, 0), (6, 1), (6, 2), (6, 3), (6, 4),
+                    (8, 4), (6, 6), (6, 7), (6, 8), (0, 5),
+                    (1, 5), (2, 5), (3, 5), (4, 5), (5, 5),
+                    (7, 5), (8, 5), (7, 3), (7, 4), (8, 3)}
+        self.assertEqual(observed, expected)
+
+    def test_peers(self):
+
+        puzzle = [
+                       ['2', '0', '0', '0', '8', '0', '3', '0', '0'],
+                       ['0', '6', '0', '0', '7', '0', '0', '8', '4'],
+                       ['0', '3', '0', '5', '0', '0', '2', '0', '9'],
+                       ['0', '0', '0', '1', '0', '5', '4', '0', '8'],
+                       ['0', '0', '0', '0', '0', '0', '0', '0', '0'],
+                       ['4', '0', '2', '7', '0', '6', '0', '0', '0'],
+                       ['3', '0', '1', '0', '0', '7', '0', '4', '0'],
+                       ['7', '2', '0', '0', '4', '0', '0', '6', '0'],
+                       ['0', '0', '4', '0', '1', '0', '0', '0', '3'],
+                 ]
+
+        observed = yass.peers((6, 5), puzzle, 'row')
+        expected = {'3', '0', '1', '4'}
+        self.assertEqual(observed, expected)
+
+        observed = yass.peers((6, 5), puzzle, 'column')
+        expected = {'0', '5', '6'}
+        self.assertEqual(observed, expected)
+
+        observed = yass.peers((6, 5), puzzle, 'unit')
+        expected = {'0', '4', '1'}
+        self.assertEqual(observed, expected)
+
+        observed = yass.peers((6, 5), puzzle, 'all')
+        expected = {'0', '1', '3', '4', '5', '6'}
+        self.assertEqual(observed, expected)
 
 if __name__ == '__main__':
     unittest.main()

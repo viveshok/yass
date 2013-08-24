@@ -1,12 +1,98 @@
 
 import re
 
+def explode(puzzle):
+    pass
+
+def is_solved(puzzle):
+    pass
+
+def is_valid(puzzle):
+    pass
+
+def propagate_constraint(puzzle):
+    pass
+
+def constraint_propagation(puzzle):
+    pass
+
+def solve(puzzle_str):
+    
+    assert(len(puzzle_str)==81)
+    puzzle = explode(deserialize(puzzle_str))
+    assert(is_valid(puzzle))
+    puzzle = constraint_propagation(puzzle)
+
+    if not is_valid(puzzle):
+        return False
+    elif is_solved(puzzle):
+        return serialize(puzzle)
+    else:
+        flattened = [(len(s), s) if len(s)>1 else (10, False) for s in row for row in puzzle]
+        assert(len(flattened)==81)
+        index, possible_values = min(flattened)
+        assert(0<=index<81)
+        assert(len(possible_values)>1)
+        for possible_value in possible_values:
+            result = solve(puzzle_str[:index] + possible_value + puzzle_str[index+1:])
+            if result:
+                return result
+
+        return False
+            
+def peers_indices_row(cell):
+    """
+    returns the indices of cells who share same row
+    """
+    (r, c) = cell
+    return {(r, i) for i in range(9)}
+
+def peers_indices_column(cell):
+    """
+    returns the indices of cells who share same column
+    """
+    (r, c) = cell
+    return {(i, c) for i in range(9)}
+
+def peers_indices_unit(cell):
+    """
+    returns the indices of cells who share same unit
+    """
+    bins = lambda x: x//3*3
+    (r, c) = cell
+    return {(i, j) for i in range(bins(r), bins(r)+3) for j in range(bins(c), bins(c)+3)}
+
 def peers_indices(cell, group, inclusive=False):
     """
     cell is a tuple (i, j) and
     group is one of 'row', 'column', 'unit', 'all'
     """
-    pass
+    if group == 'row':
+        result = peers_indices_row(cell)
+    elif group == 'column':
+        result = peers_indices_column(cell)
+    elif group == 'unit':
+        result = peers_indices_unit(cell)
+    elif group == 'all':
+        result = peers_indices_row(cell)
+        result |= peers_indices_column(cell)
+        result |= peers_indices_unit(cell)
+
+    if not inclusive:
+        result.remove(cell)
+
+    return result
+
+def peers(cell, puzzle, group):
+    """
+    given a cell (i,j), a puzzle in the list of
+    list of string representation, and a group
+    (one of 'row', 'column', 'unit' or 'all'),
+    return a set of the content of the peers
+    cells of that group of that puzzle of that
+    cell
+    """
+    return {puzzle[i][j] for (i, j) in peers_indices(cell, group)}
 
 def parse(puzzle):
     """

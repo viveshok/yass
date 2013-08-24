@@ -2,13 +2,12 @@
 Yet Another Sudoku Solver
 ===================================================
 
-Simply an exercise to (i) practice TDD and (ii) learn more
-about persistent data structures. The standard methods (constraint
-propagation and DFS/backtracking) will be used.
+Simply an exercise to practice TDD. The standard
+methods (constraint propagation and DFS/backtracking)
+are used.
 
-References:
+Reference(s):
 * [norvig.com/sudoku.html](http://norvig.com/sudoku.html)
-* [www.cs.cmu.edu/~rwh/theses/okasaki.pdf](http://www.cs.cmu.edu/~rwh/theses/okasaki.pdf)
 
 Roadmap
 ---------------------------------------------------
