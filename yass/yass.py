@@ -1,5 +1,6 @@
 
 import re
+import copy
 
 def explode(puzzle):
     """
@@ -49,6 +50,10 @@ def follow_rules(puzzle):
                         ]
             if len(set(set_cells))!=len(set_cells):
                 return False
+
+    # make sure no cell is empty
+    if any([not cell for row in puzzle for cell in row]):
+        return False
 
     return True
 
@@ -100,11 +105,11 @@ def remove_impossibles(cell, puzzle):
     they are already taken by its peers, and return
     a string with possible realization for this cell
     """
-    assert(is_valid(puzzle))
     (i, j) = cell
     values = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
     peers_ = {cell for cell in peers(cell, puzzle, 'all') if cell in values}
-    return ''.join(set(puzzle[i][j])-peers_)
+    result = ''.join(set(puzzle[i][j])-peers_)
+    return result
 
 def coerce_compelled(cell, puzzle):
     """
@@ -115,8 +120,6 @@ def coerce_compelled(cell, puzzle):
     yes return that value, otherwise return initial
     string with possible values for that cell
     """
-
-    assert(is_valid(puzzle))
 
     # row
     (i, j) = cell
@@ -141,35 +144,17 @@ def coerce_compelled(cell, puzzle):
 
     return puzzle[i][j]
 
-def propagate_constraint_cell(puzzle, row, column):
-    """
-    constraint propagation for one cells
-    """
-    assert(is_valid(puzzle))
-    values = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
-
-    if puzzle[row][column] in values:
-        return puzzle[row][column]
-
-    remainder = remove_impossibles((row, column), puzzle)
-    puzzle[row][column] = remainder
-    if remainder in values:
-        return remainder
-
-    remainder = coerce_compelled((row, column), puzzle)
-    puzzle[row][column] = remainder
-    return remainder
-
 def propagate_constraint(puzzle):
     """
     one pass of constraint propagation for all cells
     """
-    assert(is_valid(puzzle))
-    # quite stateful code, might consider refactoring
+    result = copy.deepcopy(puzzle)
     for i in range(9):
         for j in range(9):
-            propagate_constraint_cell(puzzle, i, j)
-    return puzzle
+            result[i][j] = remove_impossibles((i, j), result)
+            result[i][j] = coerce_compelled((i, j), result)
+
+    return result
 
 def constraint_propagation(puzzle_str):
     """
@@ -181,7 +166,7 @@ def constraint_propagation(puzzle_str):
 
     different = True
     while different:
-        propagate_constraint(puzzle)
+        puzzle = propagate_constraint(puzzle)
         serialized = serialize(puzzle)
         different = serialized != puzzle_str
         puzzle_str = serialized
@@ -192,9 +177,6 @@ def solve(puzzle_str):
     
     assert(len(puzzle_str)==81)
     puzzle = constraint_propagation(puzzle_str)
-
-#    import pdb
-#    pdb.set_trace()
 
     if not is_valid(puzzle):
         return False
@@ -210,20 +192,16 @@ def solve(puzzle_str):
                     ]
 
         assert(len(flattened)==81)
-        print(flattened)
         num_val, possible_values, index = min(flattened)
-        print(index)
-        print(possible_values)
-        print(flattened[index])
-#        assert(0<=index<81)
-#        assert(len(possible_values)>1)
-#        for possible_value in possible_values:
-#            trial = puzzle_str[:index] + possible_value + puzzle_str[index+1:]
-#            result = solve(trial)
-#            if result:
-#                return result
-#
-#        return False
+        assert(0<=index<81)
+        assert(len(possible_values)>1)
+        for possible_value in possible_values:
+            trial = puzzle_str[:index] + possible_value + puzzle_str[index+1:]
+            result = solve(trial)
+            if result:
+                return result
+
+        return False
             
 def peers_indices_row(cell):
     """
