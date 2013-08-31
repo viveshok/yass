@@ -173,6 +173,19 @@ def constraint_propagation(puzzle_str):
 
     return puzzle
 
+def solve_sudoku(grid):
+
+    if not well_formed(grid):
+        return None
+
+    result = solve(serialize(grid))
+    if result:
+        result = deserialize(result)
+        for row in result:
+            row = [int(c) for c in row]
+
+    return result
+
 def solve(puzzle_str):
     
     assert(len(puzzle_str)==81)
@@ -202,7 +215,7 @@ def solve(puzzle_str):
                 return result
 
         return False
-            
+
 def peers_indices_row(cell):
     """
     returns the indices of cells who share same row
@@ -317,7 +330,7 @@ def serialize(puzzle):
 
     result = str()
     for row in puzzle:
-        result += ''.join([str(s) if len(s)==1 else '0' for s in row])
+        result += ''.join([str(s) if len(str(s))==1 else '0' for s in row])
     
     assert(len(result)==81)
 

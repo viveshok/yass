@@ -520,22 +520,6 @@ class TestYass(unittest.TestCase):
 
         self.assertTrue(compare('123456789', yass.coerce_compelled((5, 3), puzzle)))
 
-    def test_propagate_constraint_cell(self):
-
-        puzzle = [
-                      ['X', 'X', '123456789', 'X', 'X', 'X', 'X', 'X', 'X'],
-                      ['X', 'X', '123456789', 'X', 'X', 'X', 'X', 'X', 'X'],
-                      ['X', 'X', '6', 'X', 'X', 'X', 'X', 'X', 'X'],
-                      ['X', 'X', '5', 'X', 'X', 'X', 'X', 'X', 'X'],
-                      ['X', 'X', '4', 'X', 'X', 'X', 'X', 'X', 'X'],
-                      ['X', 'X', '3', 'X', 'X', 'X', 'X', 'X', 'X'],
-                      ['89', '12345689', '123456789', 'X', 'X', 'X', 'X', 'X', 'X'],
-                      ['135', '1234', '2', 'X', 'X', 'X', 'X', 'X', 'X'],
-                      ['12398', '986', '1', 'X', 'X', 'X', 'X', 'X', 'X'],
-                 ]
-
-        self.assertEqual('7', yass.propagate_constraint_cell(puzzle, 6, 2))
-
     def test_constraint_propagation(self):
         puzzle = '708153042423698571105702938289431065501267489674589123912806004307924810806315297'
 
