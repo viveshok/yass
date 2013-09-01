@@ -13,9 +13,4 @@ deep copies.
 Reference(s):
 * [norvig.com/sudoku.html](http://norvig.com/sudoku.html)
 
-Roadmap
----------------------------------------------------
-1) finish tests for peer indices
-2) peer indices function
-3) ...
 

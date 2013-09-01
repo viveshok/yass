@@ -2,6 +2,7 @@
 import sys
 import unittest
 import collections
+import itertools
 
 sys.path.append('../yass')
 
@@ -543,6 +544,19 @@ class TestYass(unittest.TestCase):
         solved = '798153642423698571165742938289431765531267489674589123912876354357924816846315297'
 
         self.assertEqual(solved, yass.solve(puzzle))
+
+    def test_big_bang(self):
+        
+        puzzles = itertools.chain(
+            yass.load('test/easy.txt', r'=+\n'),
+            yass.load('test/euler.txt', r'Grid\ \d+\n'),
+            yass.load('test/hard.txt', r'\n'),
+            yass.load('test/hard2.txt', r'\n')
+        )
+
+        for puzzle in puzzles:
+            assert(yass.is_solved(yass.deserialize(yass.solve(puzzle))))
+            sys.stdout.write('.')
 
 if __name__ == '__main__':
     unittest.main()

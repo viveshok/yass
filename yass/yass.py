@@ -173,19 +173,6 @@ def constraint_propagation(puzzle_str):
 
     return puzzle
 
-def solve_sudoku(grid):
-
-    if not well_formed(grid):
-        return None
-
-    result = solve(serialize(grid))
-    if result:
-        result = deserialize(result)
-        for row in result:
-            row = [int(c) for c in row]
-
-    return result
-
 def solve(puzzle_str):
     
     assert(len(puzzle_str)==81)
